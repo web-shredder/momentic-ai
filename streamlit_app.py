@@ -477,6 +477,9 @@ def execute_workflow(workflow: Dict, initial_input: Any = None) -> ExecutionResu
 
 def render_workflow_canvas():
     """Render the visual workflow canvas using HTML/JavaScript"""
+    nodes_json = json.dumps(st.session_state.current_workflow['nodes'])
+    connections_json = json.dumps(st.session_state.current_workflow['connections'])
+
     canvas_html = """
     <div id="workflow-canvas" style="width: 100%; height: 600px; border: 2px solid #D0D8DD; border-radius: 8px; background: #f8f9fa; position: relative; overflow: auto;">
         <div style="position: absolute; top: 10px; right: 10px; z-index: 100;">
@@ -524,8 +527,8 @@ def render_workflow_canvas():
     }
     
     // Render nodes
-    const nodes = %s;
-    const connections = %s;
+    const nodes = NODES_JSON;
+    const connections = CONNECTIONS_JSON;
     
     nodes.forEach(node => {
         const nodeEl = document.createElement('div');
@@ -619,7 +622,9 @@ def render_workflow_canvas():
     
     updateConnections();
     </script>
-    """ % (json.dumps(st.session_state.current_workflow['nodes']), json.dumps(st.session_state.current_workflow['connections']))
+    """
+
+    canvas_html = canvas_html.replace("NODES_JSON", nodes_json).replace("CONNECTIONS_JSON", connections_json)
     
     components.html(canvas_html, height=650)
 
