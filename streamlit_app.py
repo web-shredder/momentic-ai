@@ -625,7 +625,8 @@ def render_workflow_canvas():
     """
 
     canvas_html = canvas_html.replace("NODES_JSON", nodes_json).replace("CONNECTIONS_JSON", connections_json)
-    
+    canvas_html = canvas_html.replace('%', '%%')
+
     components.html(canvas_html, height=650)
 
 def add_node_to_workflow(node_type: str, subtype: str, x: float = None, y: float = None) -> str:
@@ -719,11 +720,15 @@ with st.sidebar:
     # User role indicator
     st.markdown(f"**Role:** {st.session_state.user_role.title()}")
     
+    if 'page_selector' not in st.session_state:
+        st.session_state.page_selector = "🏠 Dashboard"
+
     page = st.selectbox(
         "Navigate",
-        ["🏠 Dashboard", "🔧 Workflow Builder", "🤖 AI Agents", "📊 Data Sources", 
-         "📚 Knowledge Base", "📝 Content Library", "📈 Analytics", "🧪 A/B Testing", 
-         "👥 Team", "⚙️ Settings"]
+        ["🏠 Dashboard", "🔧 Workflow Builder", "🤖 AI Agents", "📊 Data Sources",
+         "📚 Knowledge Base", "📝 Content Library", "📈 Analytics", "🧪 A/B Testing",
+         "👥 Team", "⚙️ Settings"],
+        key="page_selector"
     )
 
 # Main content based on page selection
@@ -846,7 +851,8 @@ elif page == "🏠 Dashboard":
                 'connections': template['connections'].copy(),
                 'variables': {}
             }
-            st.switch_page("pages/workflow_builder.py")
+            st.session_state.page_selector = "🔧 Workflow Builder"
+            st.experimental_rerun()
     
     with col2:
         if st.button("📱 Social Media Suite", use_container_width=True):
@@ -858,7 +864,8 @@ elif page == "🏠 Dashboard":
                 'connections': template['connections'].copy(),
                 'variables': {}
             }
-            st.switch_page("pages/workflow_builder.py")
+            st.session_state.page_selector = "🔧 Workflow Builder"
+            st.experimental_rerun()
     
     with col3:
         if st.button("📧 Email Campaign", use_container_width=True):
