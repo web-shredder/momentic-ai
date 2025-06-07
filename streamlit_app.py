@@ -1398,8 +1398,6 @@ elif page == "🤖 AI Agents":
                             st.session_state.agents[selected_agent]['prompt'] = test_prompt
                             st.success("✅ Agent updated with new prompt!")
                             st.rerun()
-                    st.success("✅ Agent updated with new prompt!")
-                            st.rerun()
     
     with tabs[3]:
         st.markdown("### Agent Performance Analytics")
